@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Cambria', serif;
+}
+
+.login {
+    position: relative;
+    left: 30%;
+    width: 40%;
+}
+
+.form-control,
+.form-select {
+    border: 0;
+    border-bottom: 1px solid rgb(120, 116, 116);
+}
+
+button {
+    border: 1px solid #1d7ff0;
+}
+
+button:hover {
+    background-color: #1d7ff0a2;
+}
+input, select{
+    padding-top: 10px;
+    font-size: large;
+}
+input::placeholder{
+    font-size: large;
+}
+hr{
+    border-top: 2px solid black;
+    border-radius: 5px;
+}

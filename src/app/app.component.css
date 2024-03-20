@@ -1,0 +1,12 @@
+.homeDetails {
+    background-color: #1d7ff0;
+    padding-top: 9%;
+    padding-right: 6%;
+    height: 450px;
+}
+
+.homeDetails2 {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+}

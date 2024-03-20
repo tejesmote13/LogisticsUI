@@ -1,0 +1,333 @@
+<div class="container my-5">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" (click)="(selectedTab='tab1')"
+        [class.active]="selectedTab == 'tab1'">{{userType | titlecase}} Orders</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="selectedTab='tab2'" [class.active]="selectedTab == 'tab2'"
+        *ngIf="userType=='customer'">Get Quotes</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="selectedTab='tab3'" [class.active]="selectedTab == 'tab3'"
+        *ngIf="userType=='customer'">Saved Quotes</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="selectedTab='tab4'" [class.active]="selectedTab == 'tab4'">
+        Historical Orders</a>
+    </li>
+  </ul>
+</div>
+
+<div class="container" *ngIf="selectedTab == 'tab1'">
+  <!-- <nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </nav> -->
+  <div class="container" *ngIf="orderList.length === 0;">No Orders Available.</div>
+  <div class="container" *ngIf="userType=='customer'">
+    <table class="table table-hover" *ngIf="orderList.length > 0;">
+      <thead>
+        <tr>
+          <th scope="col" (click)="sortBy('orderId')">Order Number <i class="fa fa-sort"></i></th>
+          <th scope="col">Created Date</th>
+          <th scope="col">Pick Up Date</th>
+          <th scope="col">Origin Zip Number</th>
+          <th scope="col">Destination Zip Number</th>
+          <th scope="col">Equipment Type</th>
+          <th scope="col">Price</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let order of orderList">
+        <tr *ngIf="order.status!='Completed'">
+          <td scope="col">{{order.orderId}}</td>
+          <td scope="col">{{order.orderDate | date }}</td>
+          <td scope="col">{{order.pickUpDate | date}}</td>
+          <td scope="col">{{order.originZipId}}</td>
+          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.equipmentName}}</td>
+          <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
+          <td scope="col">{{order.status}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container" *ngIf="userType=='carrier'">
+    <table class="table table-hover" *ngIf="orderList.length > 0;">
+      <thead>
+        <tr>
+          <th scope="col">Order Number</th>
+          <th scope="col">Order Date</th>
+          <th scope="col">Pick Up Date</th>
+          <th scope="col">Origin Zip Number</th>
+          <th scope="col">Destination Zip Number</th>
+          <th scope="col">Equipment Type</th>
+          <th scope="col">Carrier Price</th>
+          <th scope="col">Status</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let order of orderList">
+        <tr *ngIf="order.status!='Completed'">
+          <td scope="col">{{order.orderId}}</td>
+          <td scope="col">{{order.orderDate | date }}</td>
+          <td scope="col">{{order.pickUpDate | date}}</td>
+          <td scope="col">{{order.originZipId}}</td>
+          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.equipmentName}}</td>
+          <td scope="col">{{order.carrierPrice | currency: 'USD' : 'symbol' : '4.2-2' }}</td>
+          <td scope="col">{{order.status}}</td>
+          <td scope="col" *ngIf="order.status=='New'"><a class="link"
+              (click)="changeOrderStatus(order.orderId)">In-progress</a></td>
+          <td scope="col" *ngIf="order.status=='InProgress'"><a class="link"
+              (click)="changeOrderStatus(order.orderId)">Complete</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container" *ngIf="(userType == 'carrierRep') || (userType == 'customerRep')">
+    <table class="table table-hover" *ngIf="orderList.length > 0;">
+      <thead>
+        <tr>
+          <th scope="col">Order Number</th>
+          <th scope="col">Order Date</th>
+          <th scope="col">Pick Up Date</th>
+          <th scope="col">Origin Zip Number</th>
+          <th scope="col">Destination Zip Number</th>
+          <th scope="col">Equipment Type</th>
+          <th scope="col">Customer Price</th>
+          <th scope="col">Carrier Price</th>
+          <th scope="col">Customer Name</th>
+          <th scope="col">Order Status</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let order of orderList">
+        <tr *ngIf="order.status!='Completed'" s>
+          <td scope="col">{{order.orderId}}</td>
+          <td scope="col">{{order.orderDate | date }}</td>
+          <td scope="col">{{order.pickUpDate | date}}</td>
+          <td scope="col">{{order.originZipId}}</td>
+          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.equipmentName}}</td>
+          <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
+          <td scope="col">{{order.carrierPrice | currency: 'USD' : 'symbol' : '4.2-2' }}</td>
+          <td scope="col">{{order.firstName}} {{order.lastName}}</td>
+          <td scope="col">{{order.status}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- <nav aria-label="Page navigation example"  *ngIf="orderList==null">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link">Previous</a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav> -->
+</div>
+
+<div class="container" *ngIf="selectedTab == 'tab2'">
+  <form [formGroup]="quoteForm" (ngSubmit)="GetQuote()">
+    <div class="column2 row pt-3 d-inline-block rounded-end-4 ps-3">
+      <h5 class="my-2 ms-4">Origin Address</h5>
+      <div class="col-13 mb-1 border border-0 d-flex ">
+        <input type="text" class="form-control mx-4" placeholder="Origin Address" aria-label="Origin Address"
+          formControlName="originAddress">
+        <input type="number" class="form-control " placeholder="Origin Zip Id" aria-label="Origin Zip Id"
+          formControlName="originZipId">
+      </div>
+    </div>
+    <br>
+    <div class="column2 row pt-3 d-inline-block rounded-end-4 ps-3">
+      <h5 class="my-2 ms-4">Destination Address</h5>
+      <div class="col-13 mb-2 border border-0 d-flex ">
+        <input type="text" class="form-control mx-4" placeholder="Destination Address" aria-label="Destination Address"
+          formControlName="destinationAddress">
+        <input type="number" class="form-control " placeholder="Destination Zip Id" aria-label="Destination Zip Id"
+          formControlName="destinationZipId">
+      </div>
+    </div>
+    <div class="column2 row pt-3 rounded-end-4 ps-3">
+      <h5 class="my-2 ms-4">Pick Up Date</h5>
+      <div class="col-5 mb-2">
+        <input type="date" class="form-control mx-4" id="inputPickUpDate" placeholder="Select Date"
+          formControlName="pickUpDate">
+      </div>
+      <div class="container" *ngIf="isDateValid">
+        <p class="text-warning">Please select today or a future date.</p>
+      </div>
+    </div>
+    <div class="column2 row pt-3 rounded-end-4 ps-3">
+      <h5 class="my-2 ms-4">Equipment Type</h5>
+      <div class="col-5 mb-2">
+        <select id="inputEquipmentType" class="form-select mx-4" formControlName="equipmentName">
+          <option selected disabled value="null">Select Type</option>
+          <option Value="Dry Van">Dry Van</option>
+          <option value="Flatbed">Flatbed</option>
+          <option value="Temperature Controlled">Temperature Controlled</option>
+          <option value="Hazmat">Hazmat</option>
+          <option value="Tanker">Tanker</option>
+          <option value="Container">Container</option>
+          <option value="Curtainside">Curtainside</option>
+          <option value="Double Drop">Double Drop</option>
+          <option value="Auto Carrier">Auto Carrier</option>
+          <option value="Reefer">Reefer</option>
+        </select>
+      </div>
+    </div>
+    <div class="container mt-3 ms-3" *ngIf="quotePrice!=null"> <strong>
+        Quotation Price: {{quotePrice | currency: 'USD' : 'symbol' : '4.2-2'}}
+      </strong> </div>
+    <div class="container mt-2">
+      <button type="submit" class="btn btn-outline-secondary my-2 mb-5 ms-5">Get
+        Quote</button>
+      <div *ngIf="quotePrice!=null">
+        <button type="button" class="btn btn-outline-secondary my-2 mb-5 ms-4" (click)="saveQuote()">Save Quote</button>
+        <button type="button" class="btn btn-outline-secondary my-2 mb-5 ms-4" (click)="createOrder()">Create
+          Order</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="container" *ngIf="selectedTab == 'tab3'">
+  <div class="container" *ngIf="orderList.length === 0;">No Orders Available.</div>
+  <div class="container">
+    <table class="table table-hover" *ngIf="orderList.length > 0;">
+      <thead>
+        <tr>
+          <th scope="col">Order Number</th>
+          <th scope="col">Created Date</th>
+          <th scope="col">Pick Up Date</th>
+          <th scope="col">Origin Zip Number</th>
+          <th scope="col">Destination Zip Number</th>
+          <th scope="col">Equipment Type</th>
+          <th scope="col">Price</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let order of quoteorderList">
+        <tr>
+          <td scope="col">{{order.pendingOrderId}}</td>
+          <td scope="col">{{order.orderDate | date }}</td>
+          <td scope="col">{{order.pickUpDate | date}}</td>
+          <td scope="col">{{order.originZipId}}</td>
+          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.equipmentName}}</td>
+          <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
+          <td scope="col"><button type="button" class="btn btn-outline-secondary"
+              (click)="createOrderFromQuote(order)">Create Order</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="container" *ngIf="selectedTab == 'tab4'">
+  <div class="container" *ngIf="orderList.length === 0;">No Orders Available.</div>
+    <div class="container" *ngIf="orderList.length > 0;">
+    <table class="table table-hover" *ngIf="userType=='customer'">
+      <thead>
+        <tr>
+          <th scope="col">Order Number</th>
+          <th scope="col">Created Date</th>
+          <th scope="col">Pick Up Date</th>
+          <th scope="col">Origin Zip Number</th>
+          <th scope="col">Destination Zip Number</th>
+          <th scope="col">Equipment Type</th>
+          <th scope="col">Price</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let order of orderList">
+        <tr *ngIf="order.status=='Completed'">
+          <td scope="col">{{order.orderId}}</td>
+          <td scope="col">{{order.orderDate | date }}</td>
+          <td scope="col">{{order.pickUpDate | date}}</td>
+          <td scope="col">{{order.originZipId}}</td>
+          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.equipmentName}}</td>
+          <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
+          <td scope="col">{{order.status}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container" *ngIf="orderList.length > 0;">
+    <table class="table table-hover" *ngIf="userType=='carrier'">
+      <thead>
+        <tr>
+          <th scope="col">Order Number</th>
+          <th scope="col">Order Date</th>
+          <th scope="col">Pick Up Date</th>
+          <th scope="col">Origin Zip Number</th>
+          <th scope="col">Destination Zip Number</th>
+          <th scope="col">Equipment Type</th>
+          <th scope="col">Carrier Price</th>
+          <th scope="col">Status</th>
+
+        </tr>
+      </thead>
+      <tbody *ngFor="let order of orderList">
+        <tr *ngIf="order.status=='Completed'">
+          <td scope="col">{{order.orderId}}</td>
+          <td scope="col">{{order.orderDate | date }}</td>
+          <td scope="col">{{order.pickUpDate | date}}</td>
+          <td scope="col">{{order.originZipId}}</td>
+          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.equipmentName}}</td>
+          <td scope="col">{{order.carrierPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
+          <td scope="col">{{order.status}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container" *ngIf="orderList.length > 0;">
+    <table class="table table-hover" *ngIf="(userType == 'carrierRep') || (userType == 'customerRep')">
+      <thead>
+        <tr>
+          <th scope="col">Order Number</th>
+          <th scope="col">Order Date</th>
+          <th scope="col">Pick Up Date</th>
+          <th scope="col">Origin Zip Number</th>
+          <th scope="col">Destination Zip Number</th>
+          <th scope="col">Equipment Type</th>
+          <th scope="col">Customer Price</th>
+          <th scope="col">Carrier Price</th>
+          <th scope="col">Customer Name</th>
+          <th scope="col">Order Status</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let order of orderList">
+        <tr *ngIf="order.status=='Completed'">
+          <td scope="col">{{order.orderId}}</td>
+          <td scope="col">{{order.orderDate | date }}</td>
+          <td scope="col">{{order.pickUpDate | date}}</td>
+          <td scope="col">{{order.originZipId}}</td>
+          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.equipmentName}}</td>
+          <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
+          <td scope="col">{{order.carrierPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
+          <td scope="col">{{order.firstName}} {{order.lastName}}</td>
+          <td scope="col">{{order.status}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.landingPage {
+    background-color: #1d7ff0;
+    
+}
+
+.homeDetails {
+    padding-top: 9%;
+    padding: 6%;
+}
+
+.currierImage {
+    background-color: #1d7ff0;
+    border: none;
+    width: 50%;
+    position: relative;
+    left: 40%
+}
+.homeDetails2{
+    background: linear-gradient(to bottom,#1d7ff0 40%, transparent  40%) no-repeat;
+}
+.aboutDiv{
+    border: none;
+}
+.custom-footer {
+    background-color: #f8f9fa; 
+    padding: 20px 0;
+    text-align: center;
+}
+.custom-footer div{
+    margin-left: 90px;
+}

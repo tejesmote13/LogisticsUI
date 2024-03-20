@@ -1,0 +1,162 @@
+<div class=" w-75 my-5 signUp">
+  <form [formGroup]="registerForm" (ngSubmit)="OnRegister()" class="d-flex justify-content-between">
+    <div class="row pt-3 d-inline-block column1 rounded-start-4 ps-3">
+      <h4 class="my-3">General Information</h4>
+      <div class="col-13 mb-4">
+        <select id="inputUserType" class="form-select column1Input" formControlName="userType">
+          <option selected value="null" disabled>User Type*</option>
+          <option value="customer">Customer</option>
+          <option value="customerRep">Customer Representative</option>
+          <option value="carrier">Carrier</option>
+          <option value="carrierRep">Carrier Representative</option>
+        </select>
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['userType'].invalid && registerForm.controls['userType'].touched)">
+        <div *ngIf="registerForm.controls['userType'].errors?.['required']">
+          Please Select User Type
+        </div>
+      </div>
+      <div class="col-13 mb-3" *ngIf="(registerForm.controls['userType'].value=='customerRep')">
+        <input type="text" class="form-control column1Input" id="inputcustomerId" placeholder="Customer User Id"
+          formControlName="customerUserId">
+        <div class="text-danger"
+          *ngIf="(registerForm.controls['customerUserId'].invalid && registerForm.controls['customerUserId'].touched)">
+          <div *ngIf="registerForm.controls['customerUserId'].errors?.['required']">
+            Please Select Customer User Id.
+          </div>
+        </div>
+      </div>
+      <div class="col-13 mb-3" *ngIf="(registerForm.controls['userType'].value=='carrierRep')">
+        <input type="text" class="form-control column1Input" id="inputcarrierId" placeholder="Carrier User Id"
+          formControlName="carrierUserId">
+        <div class="text-danger"
+          *ngIf="(registerForm.controls['carrierUserId'].invalid && registerForm.controls['carrierUserId'].touched)">
+          <div *ngIf="registerForm.controls['carrierUserId'].errors?.['required']">
+            Please Select Carrier User Id.
+          </div>
+        </div>
+      </div>
+      <div class="col-13 mb-4 border border-0 d-flex ">
+        <input type="text" class="form-control column1Input " placeholder="First name*" aria-label="First name"
+          formControlName="firstName">
+        <input type="text" class="form-control ms-4 column1Input" placeholder="Last name*" aria-label="Last name"
+          formControlName="lastName">
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['firstName'].invalid &&  registerForm.controls['firstName'].touched) || (registerForm.controls['lastName'].invalid &&  registerForm.controls['lastName'].touched)">
+        <div
+          *ngIf="(registerForm.controls['firstName'].errors?.['required'])  || (registerForm.controls['lastName'].errors?.['required'])">
+          Please Enter First and Last Name</div>
+      </div>
+
+      <div class="col-13 mb-4">
+        <input type="text" class="form-control column1Input" id="inputUserId" placeholder="User Id*"
+          formControlName="userId">
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['userId'].invalid && registerForm.controls['userId'].touched)">
+        <div *ngIf="registerForm.controls['userId'].errors?.['required']"> Please Enter User Id</div>
+      </div>
+      <div class="col-13 mb-4">
+        <input type="email" class="form-control column1Input" id="inputEmail" email placeholder="Email Id*"
+          formControlName="emailId">
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['emailId'].invalid && registerForm.controls['emailId'].touched)">
+        <div *ngIf="registerForm.controls['emailId'].errors?.['required']"> Please Enter Email Id</div>
+        <div *ngIf="registerForm.controls['emailId'].errors?.['email']">
+          <p>Please enter a valid email address.</p>
+        </div>
+      </div>
+      <div class="col-13 mb-4">
+        <input type="password" class="form-control column1Input" id="inputPassword" placeholder="Password*"
+          formControlName="password">
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['password'].touched && registerForm.controls['password'].invalid)">
+        <div *ngIf="registerForm.controls['password'].errors?.['required']"> Please Enter password</div>
+      </div>
+
+      <div class="col-13 mb-4">
+        <input type="password" class="form-control column1Input" id="inputConfirmPassword"
+          placeholder="Confirm Password*" formControlName="confirmPassword">
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['confirmPassword'].touched && registerForm.controls['confirmPassword'].invalid)">
+        <div *ngIf="registerForm.controls['confirmPassword'].errors?.['required']"> Please Re-Enter password</div>
+      </div>
+      <div class="text-danger inputmargin" *ngIf="registerForm.controls['confirmPassword'].dirty">
+        <div *ngIf="registerForm.controls['confirmPassword'].value !== registerForm.controls['password'].value">Both
+          password should match.</div>
+      </div>
+      <div class="text-danger inputmargin" *ngIf="(registerForm.controls['confirmPassword'].errors?.['pattern'])">
+        Invalid Password. Password should be 10 characters, can be alphanumeric, no space, need one special character.
+      </div>
+    </div>
+    <br>
+
+    <div class="column2 row pt-3 d-inline-block rounded-end-4 ps-3">
+      <h4 class="my-3">Address Information</h4>
+      <div class="col-13 mb-4" formGroupName="address">
+        <input type="text" class="form-control column2Input" id="inputAddress" placeholder="Address*"
+          formControlName="street">
+      </div>
+
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['address'].get('street')?.touched && registerForm.controls['address'].get('street')?.invalid)">
+        <div *ngIf="registerForm.controls['address'].get('street')?.errors?.['required']">
+          Street is required.
+        </div>
+      </div>
+
+      <div class="col-13 mb-4" formGroupName="address">
+        <input type="text" class="form-control column2Input" id="inputCity" placeholder="City*" formControlName="city">
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['address'].get('city')?.touched  && registerForm.controls['address'].get('city')?.invalid)">
+        <div *ngIf="registerForm.controls['address'].get('city')?.errors?.['required']">
+          City is required.
+        </div>
+      </div>
+      <div class="col-13 mb-4" formGroupName="address">
+        <select id="inputState" class="form-select column2Input" formControlName="state">
+          <option selected disabled value="null">State*</option>
+          <option *ngFor="let state of states" value="state">{{state}}</option>
+        </select>
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['address'].get('state')?.touched  && registerForm.controls['address'].get('state')?.invalid)">
+        <div *ngIf="registerForm.controls['address'].get('state')?.errors?.['required']">
+          State is required.
+        </div>
+      </div>
+
+      <div class="col-13 mb-4">
+        <input type="number" class="form-control column2Input" id="inputZip" placeholder="Zip Code*"
+          formControlName="zipId">
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['zipId'].touched && registerForm.controls['zipId'].invalid)">
+        <div *ngIf="registerForm.controls['zipId'].errors?.['required']"> Please Enter Zip Number</div>
+      </div>
+
+      <div class="col-13 mb-3">
+        <input type="text" class="form-control column2Input" id="inputPhone" placeholder="Phone Number*"
+          formControlName="phone">
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(registerForm.controls['phone'].touched && registerForm.controls['phone'].invalid)">
+        <div *ngIf="registerForm.controls['phone'].errors?.['required']"> Please Enter Phone Number</div>
+      </div>
+      <div class="text-danger inputmargin" *ngIf="(registerForm.controls['phone'].errors?.['pattern'])">
+        Please enter a valid phone number.
+      </div>
+
+      <div class="col-13 my-4">
+        <button type="submit" class="btn mt-3 formbtn"
+          [disabled]="!registerForm.valid || registerForm.controls['confirmPassword'].value !== registerForm.controls['password'].value"><strong>Register</strong></button>
+      </div>
+    </div>
+  </form>
+</div>

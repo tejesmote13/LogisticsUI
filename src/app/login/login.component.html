@@ -1,0 +1,41 @@
+<div class="modal-body mt-4 login">
+    <h3 class="text-center ">Login</h3>
+    <hr class="mt-3">
+    <form [formGroup]="loginForm" (ngSubmit)="OnSubmit()">
+        <div class="col-13 px-4 py-3">
+            <select id="inputUserType" class="form-select ps-3" formControlName="userType">
+                <option selected value="null" disabled>User Type</option>
+                <option value="customer">Customer</option>
+                <option value="customerRep">Customer Representative</option>
+                <option value="carrier">Carrier</option>
+                <option value="carrierRep">Carrier Representative</option>
+            </select>
+        </div>
+        <div class="text-danger"
+            *ngIf="(loginForm.controls['userType'].touched && loginForm.controls['userType'].invalid)">
+            <div *ngIf="loginForm.controls['userType'].errors?.['required']"> Please Select User Type</div>
+        </div>
+
+        <div class="px-4 py-3">
+            <input type="text" class="form-control ps-3" id="userId" aria-describedby="userIdHelp"
+                formControlName="userId" placeholder="Enter your User Id" required>
+        </div>
+        <div class="text-danger"
+            *ngIf="(loginForm.controls['userId'].touched && loginForm.controls['userId'].invalid)">
+            <div *ngIf="loginForm.controls['userId'].errors?.['required']"> Please Enter User Id</div>
+        </div>
+
+        <div class="px-4 py-3">
+            <input type="password" class="form-control ps-3" id="psd" placeholder="Enter your password" required
+                formControlName="password">
+        </div>
+        <div class="text-danger"
+            *ngIf="(loginForm.controls['password'].touched && loginForm.controls['password'].invalid)">
+            <div *ngIf="loginForm.controls['password'].errors?.['required']"> Please Enter Password</div>
+        </div>
+
+        <button type="submit" class="btn mt-3 w-100 fw-bold py-2" [disabled]="!loginForm.valid" >Log In</button>
+    </form>
+    <p class="text-center text-muted mt-3 mb-0">Don't have an account? <a href="register" class="fw-bold text-body">
+            Register here</a></p>
+</div>
