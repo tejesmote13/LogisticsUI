@@ -7,17 +7,24 @@
         </button>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item me-3 border border-white rounded" *ngIf="!this._loginService.isLoggedIn();">
-                    <a class="nav-link text-white px-3 py-2" aria-current="page" href="#" [routerLink]="['login']" >Login</a>
+                <li class="nav-item me-3 border border-white rounded" *ngIf="!this._authService.isLoggedIn();">
+                    <a class="nav-link text-white px-3 py-2" aria-current="page" href="#"
+                        [routerLink]="['login']">Login</a>
                 </li>
-                <li class="nav-item me-5  border border-white rounded bg-white" *ngIf="!this._loginService.isLoggedIn();">
-                    <a class="nav-link text-primary px-3 py-2" href="#" [routerLink]="['register']" >Register</a>
+                <li class="nav-item me-5  border border-white rounded bg-white"
+                    *ngIf="!this._authService.isLoggedIn();">
+                    <a class="nav-link text-primary px-3 py-2" href="#" [routerLink]="['register']">Register</a>
                 </li>
-                <li class="nav-item me-3 border border-white rounded" *ngIf="this._loginService.isLoggedIn();">
+                <li class="nav-item mt-2 me-3" *ngIf="this._authService.isLoggedIn();">
+                    <span class="navbar-text text-white">
+                        Hello <strong> {{userId | titlecase}} </strong>
+                    </span>
+                </li>
+                <li class="nav-item me-3 border border-white rounded" *ngIf="this._authService.isLoggedIn();">
                     <a class="nav-link text-white px-3 py-2" aria-current="page" href="#" (click)="logout()">Log Out</a>
                 </li>
             </ul>
-        
+
         </div>
     </div>
 </nav>

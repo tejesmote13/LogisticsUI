@@ -1,22 +1,36 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { LoginComponent } from '../login.component';
-import { Observable } from 'rxjs';
-import { LoginService } from './login.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AuthService {
+    private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+    private tokenKey = 'logintoken';
 
-    constructor(private router: Router, private _loginService: LoginService) { }
-    canActivate(): boolean {
-        if (this._loginService.isLoggedIn()) {
-            return true;
-        } else {
-            alert("Please Login First.");
-            this.router.navigate(['/login']);
-            return false;
+    getToken(): string | null {
+        if (typeof localStorage != 'undefined') {
+            return localStorage.getItem(this.tokenKey);
         }
+        return null;
+    }
+    decodeToken() {
+        const jwtHelper = new JwtHelperService();
+        const token = this.getToken()!;
+        return jwtHelper.decodeToken(token);
+    }
+
+    isLoggedIn() {
+        const token = this.getToken();
+        return !!token;
+    }
+
+    setToken(token: string): void {
+        localStorage.setItem(this.tokenKey, token);
+    }
+
+    clearToken(): void {
+        localStorage.removeItem(this.tokenKey);
     }
 }

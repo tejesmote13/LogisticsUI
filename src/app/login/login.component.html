@@ -1,4 +1,10 @@
-<div class="modal-body mt-4 login">
+
+<!-- <div class="alert alert-warning pt-1 px-2 fade show" role="alert" *ngIf="!_loginService.isLoggedIn()">
+    <strong>Please Login First.</strong>
+    <button type="button" class="btn-close p-1 float-end outline-none" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div> -->
+  
+  <div class="modal-body mt-4 login">
     <h3 class="text-center ">Login</h3>
     <hr class="mt-3">
     <form [formGroup]="loginForm" (ngSubmit)="OnSubmit()">

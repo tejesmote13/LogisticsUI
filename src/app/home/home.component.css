@@ -1,3 +1,6 @@
-.link{
+.pointer{
     cursor: pointer;
+}
+.inputmargin{
+    margin-left: 20px;
 }

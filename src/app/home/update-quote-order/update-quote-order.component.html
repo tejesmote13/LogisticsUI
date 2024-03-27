@@ -1,0 +1,63 @@
+<div class="container">
+
+    <form [formGroup]="updateQuoteOrder" (ngSubmit)="GetQuote()">
+        <div class="column2 row pt-3 rounded-end-4 ps-3">
+            <h5 class="my-2 ms-4">Origin Address</h5>
+            <div class="col-5 mb-2">
+                <input type="text" class="form-control ms-4" placeholder="Origin Address" list="browsers" name="browser"
+                    id="browser" aria-label="Origin Address" formControlName="originZipId">
+                <datalist id="browsers">
+                    <option *ngFor="let address of addressList" value="{{address.zipId}}">{{address.city}},
+                        {{address.state}}
+                    </option>
+                </datalist>
+            </div>
+        </div>
+        <div class="column2 row pt-3 rounded-end-4 ps-3">
+            <h5 class="my-2 ms-4">Destination Address</h5>
+            <div class="col-5 mb-2 ">
+                <input type="text" class="form-control ms-4" placeholder="Destination Address"
+                    aria-label="Destination Address" formControlName="destinationZipId" list="browsers1" name="browser"
+                    id="browser">
+                <datalist id="browsers1">
+                    <option *ngFor="let address of addressList" value="{{address.zipId}}">{{address.city}},
+                        {{address.state}}
+                    </option>
+                </datalist>
+            </div>
+        </div>
+
+        <div class="column2 row pt-3 rounded-end-4 ps-3">
+            <h5 class="my-2 ms-4">Pick Up Date</h5>
+            <div class="col-5 mb-2">
+                <input type="date" class="form-control ms-4" id="inputPickUpDate" placeholder="Select Date"
+                    formControlName="pickUpDate">
+            </div>
+        </div>
+
+        <div class="column2 row pt-3 rounded-end-4 ps-3">
+            <h5 class="my-2 ms-4">Equipment Type</h5>
+            <div class="col-5 mb-2">
+                <input type="text" class="form-control ms-4" placeholder="Equipment Name" aria-label="Equipment Name"
+                    formControlName="equipmentName" list="equipment" name="browsers" id="browsers">
+                <datalist id="equipment">
+                    <option *ngFor="let equipment of equipmentList" value="{{equipment.equipmentName}}">
+                        {{equipment.equipmentName}}</option>
+                </datalist>
+
+            </div>
+        </div>
+        <div class=" mt-3 ms-3" *ngIf="quotePrice!=null"> <strong>
+                Quotation Price: {{quotePrice | currency: 'USD' : 'symbol' : '4.2-2'}}
+            </strong> </div>
+        <div class=" d-flex justify-content-start mb-5 ps-5 mt-4">
+            <button type="submit" class="btn btn-outline-success">Get
+                Quote</button>
+            <div *ngIf="quotePrice!=null">
+                <button type="button" class="btn btn-outline-success ms-4" (click)="updateOrder()">Update
+                    Order</button>
+            </div>
+            <button type="button" class="btn btn-outline-warning ms-4" (click)="goBack()">Go Back</button>
+        </div>
+    </form>
+</div>

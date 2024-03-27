@@ -9,6 +9,8 @@ export interface IOrder {
     status: string,
     originZipId: number,
     destinationZipId: number,
+    originAddress:string,
+    destinationAddress:string,
     equipmentName: string,
     carrierPrice: number,
     customerPrice: number,

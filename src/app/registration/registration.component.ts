@@ -19,7 +19,7 @@ export class RegistrationComponent {
   ];
   passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
   phoneNumberPattern = /^(\+?1)?[-.\s]?(\d{3})[-.\s]?(\d{3})[-.\s]?(\d{4})$/;
-
+  error!: string;
   registerForm!: FormGroup;
 
   constructor(private builder: FormBuilder, private _registerService: RegistationService, private route: Router) { }
@@ -61,9 +61,9 @@ export class RegistrationComponent {
           alert('You have successfully registered : ' + this.registerForm.value.userId);
           this.route.navigate(['login']);
         } else {
-          alert(message);
+          this.error = message;
         }
-      }, (error) => { console.error('Error in request : ', error) });
+      }, (error) => { this.error = error; });
     }
     else if (this.registerForm.value.userType == 'carrier') {
       this._registerService.addCarrierRegistrationDetails(this.registerForm.value).subscribe((res) => {
@@ -73,9 +73,9 @@ export class RegistrationComponent {
           alert('You have successfully registered : ' + this.registerForm.value.userId);
           this.route.navigate(['login']);
         } else {
-          alert(message);
+          this.error = message;
         }
-      }, (error) => { console.error('Error in request : ', error) });
+      }, (error) => { this.error = error; });
     }
     else if (this.registerForm.value.userType == 'carrierRep') {
       this._registerService.addCarrierRepRegistrationDetails(this.registerForm.value).subscribe((res) => {
@@ -85,9 +85,9 @@ export class RegistrationComponent {
           alert('You have successfully registered : ' + this.registerForm.value.userId);
           this.route.navigate(['login']);
         } else {
-          alert(message);
+          this.error = message;
         }
-      }, (error) => { console.error('Error in request', error) });
+      }, (error) => { this.error = error; });
     }
     else {
       this._registerService.addCustomerRepRegistrationDetails(this.registerForm.value).subscribe((res) => {
@@ -97,9 +97,9 @@ export class RegistrationComponent {
           alert('You have successfully registered : ' + this.registerForm.value.userId);
           this.route.navigate(['login']);
         } else {
-          alert(message);
+          this.error = message;
         }
-      }, (error) => { console.error('Error in request', error) });
+      }, (error) => { this.error = error; });
     }
   }
 }

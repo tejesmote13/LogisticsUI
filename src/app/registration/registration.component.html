@@ -1,3 +1,7 @@
+<div class="alert alert-warning" role="alert" *ngIf="error!=null">
+  <strong>{{error}}</strong>
+</div>
+
 <div class=" w-75 my-5 signUp">
   <form [formGroup]="registerForm" (ngSubmit)="OnRegister()" class="d-flex justify-content-between">
     <div class="row pt-3 d-inline-block column1 rounded-start-4 ps-3">

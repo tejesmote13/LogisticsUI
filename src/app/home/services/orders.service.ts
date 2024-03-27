@@ -7,6 +7,7 @@ import { IOrder } from './IOrder';
   providedIn: 'root'
 })
 export class OrdersService {
+
   constructor(private http: HttpClient) { }
   url = 'http://localhost:5011/api/Order/';
 
@@ -14,8 +15,8 @@ export class OrdersService {
     return this.http.get<IOrder[]>(this.url + 'getOrdersDetails/' + userId).pipe(catchError(this.errorHandler));
   }
 
-  getCarrierOrderDetails(userId: string): Observable<IOrder[]> {
-    return this.http.get<IOrder[]>(this.url + 'getCarrierOrdersDetails/' + userId).pipe(catchError(this.errorHandler));
+  getCarrierOrderDetails(): Observable<IOrder[]> {
+    return this.http.get<IOrder[]>(this.url + 'getCarrierOrdersDetails').pipe(catchError(this.errorHandler));
   }
 
   getQuotePrice(quoteForm: any, distance: number) {
@@ -38,14 +39,24 @@ export class OrdersService {
     return this.http.post<any>(this.url + 'saveQuoteOrder', quoteData, { headers: headers }).pipe(catchError(this.errorHandler));
   }
 
-  saveOrder(orderData: any): Observable<any> {
+  saveOrder(orderData: any, pendingOrderId: number): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(this.url + 'saveOrder', orderData, { headers: headers }).pipe(catchError(this.errorHandler));
+    return this.http.post<any>(this.url + 'saveOrder?pendingOrderId=' + pendingOrderId, orderData, { headers: headers }).pipe(catchError(this.errorHandler));
   }
 
-  changeOrderStatus(orderId:number):Observable<any>{
-    console.log(orderId);
-    return this.http.get<any>(this.url+'changeOrderStatus?orderId='+orderId).pipe(catchError(this.errorHandler));
+  changeOrderStatus(orderId: number): Observable<any> {
+    return this.http.get<any>(this.url + 'changeOrderStatus?orderId=' + orderId).pipe(catchError(this.errorHandler));
+  }
+
+  getAddressList(): Observable<any[]> {
+    return this.http.get<any[]>(this.url + 'getAddressList').pipe(catchError(this.errorHandler));
+  }
+  getEquipmentList(): Observable<any[]> {
+    return this.http.get<any[]>(this.url + 'getEquipmentList').pipe(catchError(this.errorHandler));
+  }
+
+  updateOrder(PendingOrderId: number, CustomerPrice: number): Observable<any> {
+    return this.http.get<any>('https://localhost:7219/api/Order/updateQuoteOrder?pendingOrderId=' + PendingOrderId + '&customerPrice=' + CustomerPrice).pipe(catchError(this.errorHandler));
   }
 
   errorHandler(error: HttpErrorResponse) {

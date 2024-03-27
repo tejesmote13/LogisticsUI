@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router, RouterModule } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
-  constructor(private builder: FormBuilder, private _loginService: LoginService, private route: Router) { }
+  constructor(private builder: FormBuilder, public _loginService: LoginService, public _authService: AuthService, private route: Router) { }
 
   ngOnInit() {
     this.loginForm = this.builder.group({
@@ -27,13 +28,13 @@ export class LoginComponent implements OnInit {
   OnSubmit() {
     this._loginService.CheckLoginDetails(this.loginForm.value).subscribe((res) => {
       if (res) {
-        localStorage.setItem('logintoken', res.token);
+        this._authService.setToken(res.token);
         this.route.navigate(['dashboard']);
       } else {
         alert('Wrong user id or password')
       }
     }, (error) => {
-      alert('Error in request. Please try again later!' );
+      alert('Error in request. Please try again later!');
     });
   }
 

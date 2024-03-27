@@ -20,36 +20,51 @@
 </div>
 
 <div class="container" *ngIf="selectedTab == 'tab1'">
-  <!-- <nav class="navbar bg-body-tertiary">
-    <div class="container-fluid">
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+  <nav class="navbar bg-body-light float-end">
+    <div class="container-fluid d-flex justify-content-center">
+      <input class="form-control me-2" type="search" placeholder="Search.." aria-label="Search"
+        [(ngModel)]="searchText">
     </div>
-  </nav> -->
-  <div class="container" *ngIf="orderList.length === 0;">No Orders Available.</div>
+  </nav>
+  <div class="container" *ngIf="orderList==null">No Orders Available.</div>
   <div class="container" *ngIf="userType=='customer'">
-    <table class="table table-hover" *ngIf="orderList.length > 0;">
+    <table class="table table-hover text-center" *ngIf="orderList!=null">
       <thead>
         <tr>
-          <th scope="col" (click)="sortBy('orderId')">Order Number <i class="fa fa-sort"></i></th>
-          <th scope="col">Created Date</th>
-          <th scope="col">Pick Up Date</th>
-          <th scope="col">Origin Zip Number</th>
-          <th scope="col">Destination Zip Number</th>
+          <th scope="col">Order Number </th>
+          <th scope="col" class="pointer" (click)="sortBy('orderDate')">Created Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('pickUpDate')">Pick Up Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col">Origin Address</th>
+          <th scope="col">Destination Address</th>
           <th scope="col">Equipment Type</th>
-          <th scope="col">Price</th>
-          <th scope="col">Status</th>
+          <th scope="col" class="pointer" (click)="sortBy('customerPrice')">Price <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('status')">Status <svg xmlns="http://www.w3.org/2000/svg"
+              height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
         </tr>
       </thead>
-      <tbody *ngFor="let order of orderList">
-        <tr *ngIf="order.status!='Completed'">
+      <tbody
+        *ngFor="let order of orderList | pagination:currentPage:itemPerPage | search:searchText:Searchcolumns | sort:sortColumn:sortOrder">
+        <tr>
           <td scope="col">{{order.orderId}}</td>
           <td scope="col">{{order.orderDate | date }}</td>
           <td scope="col">{{order.pickUpDate | date}}</td>
-          <td scope="col">{{order.originZipId}}</td>
-          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.originAddress}}</td>
+          <td scope="col">{{order.destinationAddress}}</td>
           <td scope="col">{{order.equipmentName}}</td>
           <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
           <td scope="col">{{order.status}}</td>
@@ -59,33 +74,50 @@
   </div>
 
   <div class="container" *ngIf="userType=='carrier'">
-    <table class="table table-hover" *ngIf="orderList.length > 0;">
+    <table class="table table-hover text-center" *ngIf="orderList!=null">
       <thead>
         <tr>
           <th scope="col">Order Number</th>
-          <th scope="col">Order Date</th>
-          <th scope="col">Pick Up Date</th>
-          <th scope="col">Origin Zip Number</th>
-          <th scope="col">Destination Zip Number</th>
+          <th scope="col" class="pointer" (click)="sortBy('orderDate')">Order Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('pickUpDate')">Pick Up Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col">Origin Address</th>
+          <th scope="col">Destination Address</th>
           <th scope="col">Equipment Type</th>
-          <th scope="col">Carrier Price</th>
-          <th scope="col">Status</th>
+          <th scope="col" class="pointer" (click)="sortBy('carrierPrice')">Carrier Price <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('status')">Status <svg xmlns="http://www.w3.org/2000/svg"
+              height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
           <th scope="col">Action</th>
         </tr>
       </thead>
-      <tbody *ngFor="let order of orderList">
+      <tbody
+        *ngFor="let order of  orderList | pagination:currentPage:itemPerPage | search:searchText:Searchcolumns | sort:sortColumn:sortOrder">
         <tr *ngIf="order.status!='Completed'">
           <td scope="col">{{order.orderId}}</td>
           <td scope="col">{{order.orderDate | date }}</td>
           <td scope="col">{{order.pickUpDate | date}}</td>
-          <td scope="col">{{order.originZipId}}</td>
-          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.originAddress}}</td>
+          <td scope="col">{{order.destinationAddress}}</td>
           <td scope="col">{{order.equipmentName}}</td>
           <td scope="col">{{order.carrierPrice | currency: 'USD' : 'symbol' : '4.2-2' }}</td>
           <td scope="col">{{order.status}}</td>
-          <td scope="col" *ngIf="order.status=='New'"><a class="link"
+          <td scope="col" *ngIf="order.status=='New'"><a class="link pointer"
               (click)="changeOrderStatus(order.orderId)">In-progress</a></td>
-          <td scope="col" *ngIf="order.status=='InProgress'"><a class="link"
+          <td scope="col" *ngIf="order.status=='InProgress'"><a class="link pointer"
               (click)="changeOrderStatus(order.orderId)">Complete</a></td>
         </tr>
       </tbody>
@@ -93,28 +125,49 @@
   </div>
 
   <div class="container" *ngIf="(userType == 'carrierRep') || (userType == 'customerRep')">
-    <table class="table table-hover" *ngIf="orderList.length > 0;">
+    <table class="table table-hover text-center" *ngIf="orderList!=null">
       <thead>
         <tr>
           <th scope="col">Order Number</th>
-          <th scope="col">Order Date</th>
-          <th scope="col">Pick Up Date</th>
-          <th scope="col">Origin Zip Number</th>
-          <th scope="col">Destination Zip Number</th>
+          <th scope="col" class="pointer" (click)="sortBy('orderDate')">Order Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('pickUpDate')">Pick Up Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col">Origin Address</th>
+          <th scope="col">Destination Address</th>
           <th scope="col">Equipment Type</th>
-          <th scope="col">Customer Price</th>
-          <th scope="col">Carrier Price</th>
-          <th scope="col">Customer Name</th>
-          <th scope="col">Order Status</th>
+          <th scope="col" class="pointer" (click)="sortBy('customerPrice')">Customer Price <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('carrierPrice')">Carrier Price <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer">Customer Name</th>
+          <th scope="col" class="pointer" (click)="sortBy('status')">Order Status <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
         </tr>
       </thead>
-      <tbody *ngFor="let order of orderList">
-        <tr *ngIf="order.status!='Completed'" s>
+      <tbody
+        *ngFor="let order of orderList | pagination:currentPage:itemPerPage | search:searchText:Searchcolumns | sort:sortColumn:sortOrder">
+        <tr>
           <td scope="col">{{order.orderId}}</td>
           <td scope="col">{{order.orderDate | date }}</td>
           <td scope="col">{{order.pickUpDate | date}}</td>
-          <td scope="col">{{order.originZipId}}</td>
-          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.originAddress}}</td>
+          <td scope="col">{{order.destinationAddress}}</td>
           <td scope="col">{{order.equipmentName}}</td>
           <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
           <td scope="col">{{order.carrierPrice | currency: 'USD' : 'symbol' : '4.2-2' }}</td>
@@ -125,79 +178,93 @@
     </table>
   </div>
 
-  <!-- <nav aria-label="Page navigation example"  *ngIf="orderList==null">
+  <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-      <li class="page-item disabled">
-        <a class="page-link">Previous</a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
       <li class="page-item">
-        <a class="page-link" href="#">Next</a>
+        <button class="page-link" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+      </li>
+      <li class="page-item " *ngFor="let pageNumber of getPageNumbers(orderList)" (click)="onPageChange(pageNumber)"><a
+          class="page-link pointer">{{pageNumber}}</a></li>
+      <li class="page-item">
+        <button class="page-link" (click)="nextPage()"
+          [disabled]="currentPage * itemPerPage >= orderList.length">Next</button>
       </li>
     </ul>
-  </nav> -->
+  </nav>
 </div>
 
 <div class="container" *ngIf="selectedTab == 'tab2'">
   <form [formGroup]="quoteForm" (ngSubmit)="GetQuote()">
-    <div class="column2 row pt-3 d-inline-block rounded-end-4 ps-3">
+    <div class="column2 row pt-3 rounded-end-4 ps-3">
       <h5 class="my-2 ms-4">Origin Address</h5>
-      <div class="col-13 mb-1 border border-0 d-flex ">
-        <input type="text" class="form-control mx-4" placeholder="Origin Address" aria-label="Origin Address"
-          formControlName="originAddress">
-        <input type="number" class="form-control " placeholder="Origin Zip Id" aria-label="Origin Zip Id"
-          formControlName="originZipId">
+      <div class="col-5 mb-2">
+        <input type="text" class="form-control mx-4" placeholder="Origin Address" list="browsers" name="browser"
+          id="browser" aria-label="Origin Address" formControlName="originZipId">
+        <datalist id="browsers">
+          <option *ngFor="let address of addressList" value="{{address.zipId}}">{{address.city}}, {{address.state}}
+          </option>
+        </datalist>
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(quoteForm.controls['originZipId'].invalid && quoteForm.controls['originZipId'].touched)">
+        <div *ngIf="quoteForm.controls['originZipId'].errors?.['required']"> Please Enter Origin Zip Id</div>
       </div>
     </div>
-    <br>
-    <div class="column2 row pt-3 d-inline-block rounded-end-4 ps-3">
+    <div class="column2 row pt-3 rounded-end-4 ps-3">
       <h5 class="my-2 ms-4">Destination Address</h5>
-      <div class="col-13 mb-2 border border-0 d-flex ">
+      <div class="col-5 mb-2 ">
         <input type="text" class="form-control mx-4" placeholder="Destination Address" aria-label="Destination Address"
-          formControlName="destinationAddress">
-        <input type="number" class="form-control " placeholder="Destination Zip Id" aria-label="Destination Zip Id"
-          formControlName="destinationZipId">
+          formControlName="destinationZipId" list="browsers1" name="browser" id="browser">
+        <datalist id="browsers1">
+          <option *ngFor="let address of addressList" value="{{address.zipId}}">{{address.city}}, {{address.state}}
+          </option>
+        </datalist>
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(quoteForm.controls['destinationZipId'].invalid && quoteForm.controls['destinationZipId'].touched)">
+        <div *ngIf="quoteForm.controls['destinationZipId'].errors?.['required']"> Please Enter Destination Zip Id</div>
       </div>
     </div>
+
     <div class="column2 row pt-3 rounded-end-4 ps-3">
       <h5 class="my-2 ms-4">Pick Up Date</h5>
       <div class="col-5 mb-2">
         <input type="date" class="form-control mx-4" id="inputPickUpDate" placeholder="Select Date"
           formControlName="pickUpDate">
       </div>
-      <div class="container" *ngIf="isDateValid">
-        <p class="text-warning">Please select today or a future date.</p>
+      <!-- <div class="container" *ngIf="isDateValid && (quoteForm.controls['pickUpDate'].dirty)">
+        <p class="text-danger">Please select today or a future date.</p>
+      </div> -->
+      <div class="text-danger inputmargin"
+        *ngIf="(quoteForm.controls['pickUpDate'].invalid && quoteForm.controls['pickUpDate'].touched)">
+        <div *ngIf="quoteForm.controls['pickUpDate'].errors?.['required']"> Please Enter PickUp Date</div>
       </div>
     </div>
+
     <div class="column2 row pt-3 rounded-end-4 ps-3">
       <h5 class="my-2 ms-4">Equipment Type</h5>
       <div class="col-5 mb-2">
-        <select id="inputEquipmentType" class="form-select mx-4" formControlName="equipmentName">
-          <option selected disabled value="null">Select Type</option>
-          <option Value="Dry Van">Dry Van</option>
-          <option value="Flatbed">Flatbed</option>
-          <option value="Temperature Controlled">Temperature Controlled</option>
-          <option value="Hazmat">Hazmat</option>
-          <option value="Tanker">Tanker</option>
-          <option value="Container">Container</option>
-          <option value="Curtainside">Curtainside</option>
-          <option value="Double Drop">Double Drop</option>
-          <option value="Auto Carrier">Auto Carrier</option>
-          <option value="Reefer">Reefer</option>
-        </select>
+        <input type="text" class="form-control mx-4" placeholder="Equipment Name" aria-label="Equipment Name"
+          formControlName="equipmentName" list="equipment" name="browsers" id="browsers">
+        <datalist id="equipment">
+          <option *ngFor="let equipment of equipmentList" value="{{equipment.equipmentName}}">
+            {{equipment.equipmentName}}</option>
+        </datalist>
+      </div>
+      <div class="text-danger inputmargin"
+        *ngIf="(quoteForm.controls['equipmentName'].invalid && quoteForm.controls['equipmentName'].touched)">
+        <div *ngIf="quoteForm.controls['equipmentName'].errors?.['required']"> Please Enter Equipment Name</div>
       </div>
     </div>
     <div class="container mt-3 ms-3" *ngIf="quotePrice!=null"> <strong>
         Quotation Price: {{quotePrice | currency: 'USD' : 'symbol' : '4.2-2'}}
       </strong> </div>
-    <div class="container mt-2">
-      <button type="submit" class="btn btn-outline-secondary my-2 mb-5 ms-5">Get
+    <div class="container mt-2 d-flex justify-content-start mb-5">
+      <button type="submit" class="btn btn-outline-secondary ms-5">Get
         Quote</button>
       <div *ngIf="quotePrice!=null">
-        <button type="button" class="btn btn-outline-secondary my-2 mb-5 ms-4" (click)="saveQuote()">Save Quote</button>
-        <button type="button" class="btn btn-outline-secondary my-2 mb-5 ms-4" (click)="createOrder()">Create
+        <button type="button" class="btn btn-outline-secondary ms-4" (click)="saveQuote()">Save Quote</button>
+        <button type="button" class="btn btn-outline-secondary ms-4" (click)="createOrder()">Create
           Order</button>
       </div>
     </div>
@@ -205,61 +272,116 @@
 </div>
 
 <div class="container" *ngIf="selectedTab == 'tab3'">
-  <div class="container" *ngIf="orderList.length === 0;">No Orders Available.</div>
+  <nav class="navbar bg-body-light float-end">
+    <div class="container-fluid d-flex justify-content-center">
+      <input class="form-control me-2" type="search" placeholder="Search.." aria-label="Search"
+        [(ngModel)]="searchText">
+    </div>
+  </nav>
+  <div class="container" *ngIf="orderList==null">No Orders Available.</div>
   <div class="container">
-    <table class="table table-hover" *ngIf="orderList.length > 0;">
+    <table class="table table-hover text-center" *ngIf="orderList!=null">
       <thead>
         <tr>
           <th scope="col">Order Number</th>
-          <th scope="col">Created Date</th>
-          <th scope="col">Pick Up Date</th>
-          <th scope="col">Origin Zip Number</th>
-          <th scope="col">Destination Zip Number</th>
+          <th scope="col" class="pointer" (click)="sortBy('orderDate')">Created Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('pickUpDate')">Pick Up Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col">Origin Address</th>
+          <th scope="col">Destination Address</th>
           <th scope="col">Equipment Type</th>
-          <th scope="col">Price</th>
+          <th scope="col" class="pointer" (click)="sortBy('customerPrice')">Price <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
           <th scope="col">Action</th>
         </tr>
       </thead>
-      <tbody *ngFor="let order of quoteorderList">
+      <tbody
+        *ngFor="let order of quoteorderList| pagination:currentPage:itemPerPage | search:searchText:Searchcolumns | sort:sortColumn:sortOrder">
         <tr>
           <td scope="col">{{order.pendingOrderId}}</td>
           <td scope="col">{{order.orderDate | date }}</td>
           <td scope="col">{{order.pickUpDate | date}}</td>
-          <td scope="col">{{order.originZipId}}</td>
-          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.originAddress}}</td>
+          <td scope="col">{{order.destinationAddress}}</td>
           <td scope="col">{{order.equipmentName}}</td>
           <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
-          <td scope="col"><button type="button" class="btn btn-outline-secondary"
-              (click)="createOrderFromQuote(order)">Create Order</button></td>
+          <td scope="col"><button type="button" class="btn btn-outline-secondary mx-4"
+              (click)="createOrderFromQuote(order)">Create Order</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="updateOrderFromQuote(order)">Update
+              Order</button>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <button class="page-link" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+      </li>
+      <li class="page-item " *ngFor="let pageNumber of getPageNumbers(quoteorderList)"
+        (click)="onPageChange(pageNumber)"><a class="page-link pointer">{{pageNumber}}</a></li>
+      <li class="page-item">
+      <li class="page-item">
+        <button class="page-link" (click)="nextPage()"
+          [disabled]="currentPage * itemPerPage >= quoteorderList.length">Next</button>
+      </li>
+    </ul>
+  </nav>
 </div>
 
 <div class="container" *ngIf="selectedTab == 'tab4'">
-  <div class="container" *ngIf="orderList.length === 0;">No Orders Available.</div>
-    <div class="container" *ngIf="orderList.length > 0;">
-    <table class="table table-hover" *ngIf="userType=='customer'">
+  <nav class="navbar bg-body-light float-end">
+    <div class="container-fluid d-flex justify-content-center ">
+      <input class="form-control me-2" type="search" placeholder="Search.." aria-label="Search"
+        [(ngModel)]="searchText">
+    </div>
+  </nav>
+  <div class="container" *ngIf="historicalOrderList==null">No Orders Available.</div>
+  <div class="container" *ngIf="historicalOrderList!=null">
+    <table class="table table-hover text-center" *ngIf="userType=='customer'">
       <thead>
         <tr>
           <th scope="col">Order Number</th>
-          <th scope="col">Created Date</th>
-          <th scope="col">Pick Up Date</th>
-          <th scope="col">Origin Zip Number</th>
-          <th scope="col">Destination Zip Number</th>
+          <th scope="col" class="pointer" (click)="sortBy('orderDate')">Created Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('pickUpDate')">Pick Up Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col">Origin Address</th>
+          <th scope="col">Destination Address</th>
           <th scope="col">Equipment Type</th>
-          <th scope="col">Price</th>
-          <th scope="col">Status</th>
+          <th scope="col" class="pointer" (click)="sortBy('customerPrice')">Price <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer">Status</th>
         </tr>
       </thead>
-      <tbody *ngFor="let order of orderList">
-        <tr *ngIf="order.status=='Completed'">
+      <tbody
+        *ngFor="let order of historicalOrderList | pagination:currentPage:itemPerPage | search:searchText:Searchcolumns | sort:sortColumn:sortOrder">
+        <tr>
           <td scope="col">{{order.orderId}}</td>
           <td scope="col">{{order.orderDate | date }}</td>
           <td scope="col">{{order.pickUpDate | date}}</td>
-          <td scope="col">{{order.originZipId}}</td>
-          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.originAddress}}</td>
+          <td scope="col">{{order.destinationAddress}}</td>
           <td scope="col">{{order.equipmentName}}</td>
           <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
           <td scope="col">{{order.status}}</td>
@@ -268,28 +390,41 @@
     </table>
   </div>
 
-  <div class="container" *ngIf="orderList.length > 0;">
-    <table class="table table-hover" *ngIf="userType=='carrier'">
+  <div class="container" *ngIf="historicalOrderList!=null">
+    <table class="table table-hover text-center" *ngIf="userType=='carrier'">
       <thead>
         <tr>
           <th scope="col">Order Number</th>
-          <th scope="col">Order Date</th>
-          <th scope="col">Pick Up Date</th>
-          <th scope="col">Origin Zip Number</th>
-          <th scope="col">Destination Zip Number</th>
+          <th scope="col" class="pointer" (click)="sortBy('orderDate')">Order Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('pickUpDate')">Pick Up Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col">Origin Address</th>
+          <th scope="col">Destination Address</th>
           <th scope="col">Equipment Type</th>
-          <th scope="col">Carrier Price</th>
+          <th scope="col" class="pointer" (click)="sortBy('carrierPrice')">Carrier Price <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
           <th scope="col">Status</th>
 
         </tr>
       </thead>
-      <tbody *ngFor="let order of orderList">
-        <tr *ngIf="order.status=='Completed'">
+      <tbody
+        *ngFor="let order of historicalOrderList | pagination:currentPage:itemPerPage | search:searchText:Searchcolumns | sort:sortColumn:sortOrder">
+        <tr>
           <td scope="col">{{order.orderId}}</td>
           <td scope="col">{{order.orderDate | date }}</td>
           <td scope="col">{{order.pickUpDate | date}}</td>
-          <td scope="col">{{order.originZipId}}</td>
-          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.originAddress}}</td>
+          <td scope="col">{{order.destinationAddress}}</td>
           <td scope="col">{{order.equipmentName}}</td>
           <td scope="col">{{order.carrierPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
           <td scope="col">{{order.status}}</td>
@@ -298,29 +433,46 @@
     </table>
   </div>
 
-  <div class="container" *ngIf="orderList.length > 0;">
-    <table class="table table-hover" *ngIf="(userType == 'carrierRep') || (userType == 'customerRep')">
+  <div class="container" *ngIf="historicalOrderList!=null">
+    <table class="table table-hover text-center" *ngIf="(userType == 'carrierRep') || (userType == 'customerRep')">
       <thead>
         <tr>
           <th scope="col">Order Number</th>
-          <th scope="col">Order Date</th>
-          <th scope="col">Pick Up Date</th>
-          <th scope="col">Origin Zip Number</th>
-          <th scope="col">Destination Zip Number</th>
+          <th scope="col" class="pointer" (click)="sortBy('orderDate')">Order Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('pickUpDate')">Pick Up Date <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col">Origin Address</th>
+          <th scope="col">Destination Address</th>
           <th scope="col">Equipment Type</th>
-          <th scope="col">Customer Price</th>
-          <th scope="col">Carrier Price</th>
+          <th scope="col" class="pointer" (click)="sortBy('customerPrice')">Customer Price <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
+          <th scope="col" class="pointer" (click)="sortBy('carrierPrice')">Carrier Price <svg
+              xmlns="http://www.w3.org/2000/svg" height="14" width="8.75" viewBox="0 0 320 512">
+              <path
+                d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z" />
+            </svg></th>
           <th scope="col">Customer Name</th>
           <th scope="col">Order Status</th>
         </tr>
       </thead>
-      <tbody *ngFor="let order of orderList">
-        <tr *ngIf="order.status=='Completed'">
+      <tbody
+        *ngFor="let order of historicalOrderList | pagination:currentPage:itemPerPage | search:searchText:Searchcolumns | sort:sortColumn:sortOrder">
+        <tr>
           <td scope="col">{{order.orderId}}</td>
           <td scope="col">{{order.orderDate | date }}</td>
           <td scope="col">{{order.pickUpDate | date}}</td>
-          <td scope="col">{{order.originZipId}}</td>
-          <td scope="col">{{order.destinationZipId}}</td>
+          <td scope="col">{{order.originAddress}}</td>
+          <td scope="col">{{order.destinationAddress}}</td>
           <td scope="col">{{order.equipmentName}}</td>
           <td scope="col">{{order.customerPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
           <td scope="col">{{order.carrierPrice | currency: 'USD' : 'symbol' : '4.2-2'}}</td>
@@ -330,4 +482,18 @@
       </tbody>
     </table>
   </div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <button class="page-link" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+      </li>
+      <li class="page-item " *ngFor="let pageNumber of getPageNumbers(historicalOrderList)"
+        (click)="onPageChange(pageNumber)"><a class="page-link pointer">{{pageNumber}}</a></li>
+      <li class="page-item">
+      <li class="page-item">
+        <button class="page-link" (click)="nextPage()"
+          [disabled]="currentPage * itemPerPage >= historicalOrderList.length">Next</button>
+      </li>
+    </ul>
+  </nav>
 </div>
