@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg ">
     <div class="container-fluid py-2 ">
-        <a class="navbar-brand text-white ps-3" href="#"><strong>CarrierConnect</strong></a>
+        <a class="navbar-brand text-white ps-3" href="#"><strong>TransportEase</strong></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -17,7 +17,7 @@
                 </li>
                 <li class="nav-item mt-2 me-3" *ngIf="this._authService.isLoggedIn();">
                     <span class="navbar-text text-white">
-                        Hello <strong> {{userId | titlecase}} </strong>
+                        Hello <strong> {{this._authService.decodeToken().unique_name[0] | titlecase}} </strong>
                     </span>
                 </li>
                 <li class="nav-item me-3 border border-white rounded" *ngIf="this._authService.isLoggedIn();">

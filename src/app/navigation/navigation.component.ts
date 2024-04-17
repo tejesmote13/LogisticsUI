@@ -17,17 +17,13 @@ import { AuthService } from '../login/services/auth.service';
 })
 export class NavigationComponent {
   userId!: string;
-  constructor(public _authService: AuthService, private route: Router) {
-    const decodedToken = this._authService.decodeToken();
-    if (decodedToken) {
-      this.userId = decodedToken.unique_name[0];
-    }
-  }
+  constructor(public _authService: AuthService, private route: Router) { }
 
   logout() {
     this._authService.clearToken();
     this.route.navigate(['home']);
   }
+
 }
 
 

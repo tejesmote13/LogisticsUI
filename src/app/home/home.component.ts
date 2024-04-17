@@ -95,9 +95,9 @@ export class HomeComponent implements OnInit {
   }
 
   GetQuote() {
-    const today = new Date();
-    debugger
-    if (this.quoteForm.value.pickUpDate < today) {
+    const today = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+    const pickUpDate = formatDate(this.quoteForm.value.pickUpDate, 'yyyy-MM-dd', 'en');
+    if (pickUpDate < today) {
       alert("PickUpDate is not valid. Please enter valid pickUpDate.")
     }
     else {
@@ -129,8 +129,9 @@ export class HomeComponent implements OnInit {
   }
 
   createOrder() {
-    const today = new Date();
-    if (this.quoteForm.value.pickUpDate < today) {
+    const today = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+    const pickUpDate = formatDate(this.quoteForm.value.pickUpDate, 'yyyy-MM-dd', 'en');
+    if (pickUpDate < today) {
       alert("PickUpDate is not valid. Please enter valid pickUpDate.")
     }
     else {
@@ -140,15 +141,19 @@ export class HomeComponent implements OnInit {
         alert("Your Order Number: " + res);
         this.loadOrderDetails(this.userId);
         this.selectedTab = 'tab1';
+        this.quoteForm.reset();
+        this.quotePrice = null;
       }, (error) => { this.error = error })
     }
   }
   createOrderFromQuote(order: any) {
-    const today = new Date();
-    if (this.quoteForm.value.pickUpDate < today) {
-      alert("PickUpDate is not valid. Please update order.")
+    const today = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+    const pickUpDate = formatDate(order.pickUpDate, 'yyyy-MM-dd', 'en');
+    if (pickUpDate < today) {
+      alert("PickUpDate is not valid. Please update order.");
     } else {
       order.userId = this.userId;
+      console.log(order);
       this._orderservice.saveOrder(order, order.pendingOrderId).subscribe((res) => {
         alert("Your Order Number: " + res);
         this.loadOrderDetails(this.userId);
@@ -164,6 +169,8 @@ export class HomeComponent implements OnInit {
       alert("Your Order Number: " + res);
       this.getQuoteOrders();
       this.selectedTab = 'tab3';
+      this.quoteForm.reset();
+      this.quotePrice = null;
     }, (error) => { this.error = error })
   }
   updateOrderFromQuote(orderData: any) {

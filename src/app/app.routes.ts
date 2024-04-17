@@ -13,6 +13,6 @@ export const routes: Routes = [
     { path: '', component: LandingComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegistrationComponent },
-    { path: 'dashboard', component: HomeComponent , canActivate:[AuthGuard]},
-    { path: 'dashboard/updatequoteOrder/:pendingOrderId/:equipmentType/:originZipId/:destinationZipId/:pickUpDate', component: UpdateQuoteOrderComponent , canActivate:[AuthGuard]}
+    { path: 'dashboard', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: 'dashboard/updatequoteOrder/:pendingOrderId/:equipmentType/:originZipId/:destinationZipId/:pickUpDate', component: UpdateQuoteOrderComponent, canActivate: [AuthGuard] }
 ];

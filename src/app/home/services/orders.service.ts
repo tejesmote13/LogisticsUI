@@ -20,7 +20,12 @@ export class OrdersService {
   }
 
   getQuotePrice(quoteForm: any, distance: number) {
-    return this.http.get<any>(this.url + `getQuotePrice/${quoteForm.value.equipmentType}/${quoteForm.value.pickUpDate}/${distance}`).pipe(catchError(this.errorHandler));
+    const quoteData = {
+      equipmentName: quoteForm.value.equipmentName,
+      pickUpDate: quoteForm.value.pickUpDate,
+      distance: distance
+    }
+    return this.http.post<any>(this.url + 'getQuotePrice', quoteData).pipe(catchError(this.errorHandler));
   }
 
   getQuoteOrders(userId: string): Observable<any[]> {
@@ -55,8 +60,8 @@ export class OrdersService {
     return this.http.get<any[]>(this.url + 'getEquipmentList').pipe(catchError(this.errorHandler));
   }
 
-  updateOrder(PendingOrderId: number, CustomerPrice: number): Observable<any> {
-    return this.http.get<any>('https://localhost:7219/api/Order/updateQuoteOrder?pendingOrderId=' + PendingOrderId + '&customerPrice=' + CustomerPrice).pipe(catchError(this.errorHandler));
+  updateOrder(updateOrderData: any): Observable<any> {
+    return this.http.post<any>(this.url+'updateQuoteOrder', updateOrderData).pipe(catchError(this.errorHandler));
   }
 
   errorHandler(error: HttpErrorResponse) {

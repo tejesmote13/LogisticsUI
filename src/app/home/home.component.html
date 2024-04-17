@@ -20,15 +20,15 @@
 </div>
 
 <div class="container" *ngIf="selectedTab == 'tab1'">
-  <nav class="navbar bg-body-light float-end">
+  <nav class="navbar bg-body-light float-end" *ngIf="orderList.length!=0">
     <div class="container-fluid d-flex justify-content-center">
       <input class="form-control me-2" type="search" placeholder="Search.." aria-label="Search"
         [(ngModel)]="searchText">
     </div>
   </nav>
-  <div class="container" *ngIf="orderList==null">No Orders Available.</div>
+  <div class="container" *ngIf="orderList.length===0">No Orders Available.</div>
   <div class="container" *ngIf="userType=='customer'">
-    <table class="table table-hover text-center" *ngIf="orderList!=null">
+    <table class="table table-hover text-center" *ngIf="orderList.length!=0">
       <thead>
         <tr>
           <th scope="col">Order Number </th>
@@ -74,7 +74,7 @@
   </div>
 
   <div class="container" *ngIf="userType=='carrier'">
-    <table class="table table-hover text-center" *ngIf="orderList!=null">
+    <table class="table table-hover text-center" *ngIf="orderList.length!=0">
       <thead>
         <tr>
           <th scope="col">Order Number</th>
@@ -125,7 +125,7 @@
   </div>
 
   <div class="container" *ngIf="(userType == 'carrierRep') || (userType == 'customerRep')">
-    <table class="table table-hover text-center" *ngIf="orderList!=null">
+    <table class="table table-hover text-center" *ngIf="orderList.length!=0">
       <thead>
         <tr>
           <th scope="col">Order Number</th>
@@ -178,7 +178,7 @@
     </table>
   </div>
 
-  <nav aria-label="Page navigation example">
+  <nav aria-label="Page navigation example" *ngIf="orderList.length!=0">
     <ul class="pagination justify-content-center">
       <li class="page-item">
         <button class="page-link" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
@@ -272,15 +272,15 @@
 </div>
 
 <div class="container" *ngIf="selectedTab == 'tab3'">
-  <nav class="navbar bg-body-light float-end">
+  <nav class="navbar bg-body-light float-end" *ngIf="quoteorderList.length!=0">
     <div class="container-fluid d-flex justify-content-center">
       <input class="form-control me-2" type="search" placeholder="Search.." aria-label="Search"
         [(ngModel)]="searchText">
     </div>
   </nav>
-  <div class="container" *ngIf="orderList==null">No Orders Available.</div>
+  <div class="container" *ngIf="quoteorderList.length===0">No Saved Orders Available.</div>
   <div class="container">
-    <table class="table table-hover text-center" *ngIf="orderList!=null">
+    <table class="table table-hover text-center" *ngIf="quoteorderList.length!=0">
       <thead>
         <tr>
           <th scope="col">Order Number</th>
@@ -324,7 +324,7 @@
       </tbody>
     </table>
   </div>
-  <nav aria-label="Page navigation example">
+  <nav aria-label="Page navigation example" *ngIf="quoteorderList.length!=0">
     <ul class="pagination justify-content-center">
       <li class="page-item">
         <button class="page-link" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
@@ -341,14 +341,14 @@
 </div>
 
 <div class="container" *ngIf="selectedTab == 'tab4'">
-  <nav class="navbar bg-body-light float-end">
+  <nav class="navbar bg-body-light float-end" *ngIf="historicalOrderList.length!=0">
     <div class="container-fluid d-flex justify-content-center ">
       <input class="form-control me-2" type="search" placeholder="Search.." aria-label="Search"
         [(ngModel)]="searchText">
     </div>
   </nav>
-  <div class="container" *ngIf="historicalOrderList==null">No Orders Available.</div>
-  <div class="container" *ngIf="historicalOrderList!=null">
+  <div class="container" *ngIf="historicalOrderList.length===0">No Historical Orders Available.</div>
+  <div class="container" *ngIf="historicalOrderList.length!=0">
     <table class="table table-hover text-center" *ngIf="userType=='customer'">
       <thead>
         <tr>
@@ -390,7 +390,7 @@
     </table>
   </div>
 
-  <div class="container" *ngIf="historicalOrderList!=null">
+  <div class="container" *ngIf="historicalOrderList.length!=0">
     <table class="table table-hover text-center" *ngIf="userType=='carrier'">
       <thead>
         <tr>
@@ -433,7 +433,7 @@
     </table>
   </div>
 
-  <div class="container" *ngIf="historicalOrderList!=null">
+  <div class="container" *ngIf="historicalOrderList.length!=0">
     <table class="table table-hover text-center" *ngIf="(userType == 'carrierRep') || (userType == 'customerRep')">
       <thead>
         <tr>
@@ -482,7 +482,7 @@
       </tbody>
     </table>
   </div>
-  <nav aria-label="Page navigation example">
+  <nav aria-label="Page navigation example" *ngIf="historicalOrderList.length!=0">
     <ul class="pagination justify-content-center">
       <li class="page-item">
         <button class="page-link" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>

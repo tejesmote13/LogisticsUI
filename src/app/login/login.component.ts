@@ -27,11 +27,13 @@ export class LoginComponent implements OnInit {
   }
   OnSubmit() {
     this._loginService.CheckLoginDetails(this.loginForm.value).subscribe((res) => {
-      if (res) {
+      const status = (res as { status: boolean }).status;
+      const message = (res as { token: string }).token;
+      if (status) {
         this._authService.setToken(res.token);
         this.route.navigate(['dashboard']);
       } else {
-        alert('Wrong user id or password')
+        alert(message);
       }
     }, (error) => {
       alert('Error in request. Please try again later!');
